@@ -1,4 +1,4 @@
-package com.project.email;
+package com.project.util;
 
 import java.util.Properties;
 
@@ -12,7 +12,6 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-;
 
 @Controller
 public class EmailSender {
@@ -27,15 +26,14 @@ public class EmailSender {
 		String fromEmail = "vinayshudedar383@gmail.com";
 		String password = "Vini@4183";
 
-		// Setting smtp properties
-
 		Properties prop = new Properties();
-		prop.put("mail.smtp.port", portNumber);
+
 		prop.put("mail.smtp.host", hostName);
+		prop.put("mail.smtp.port", portNumber);
 		prop.put("mail.smtp.starttls.enable", true);
-		prop.put("mail-debug", true);
+		prop.put("mail.debug", true);
 		prop.put("mail.smtp.auth", true);
-		prop.put("mail.transport.protocal", "smtp");
+		prop.put("mail.transport.protocol", "smtp");
 
 		// Creating seission object
 
@@ -44,6 +42,7 @@ public class EmailSender {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(fromEmail, password);
 			}
+			
 		});
 
 		// Creating the message object
@@ -53,13 +52,13 @@ public class EmailSender {
 			message.setFrom(new InternetAddress(fromEmail));
 			message.setSubject(subject);
 			message.setText(text);
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress());
-
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 			Transport.send(message);
 			return true;
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Email Send Successfully");
 		return false;
 	}
 }

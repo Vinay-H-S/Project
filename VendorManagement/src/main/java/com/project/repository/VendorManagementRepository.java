@@ -6,14 +6,12 @@ import com.project.entity.VendorManagementEntity;
 
 public interface VendorManagementRepository {
 
-	
 	public boolean save(VendorManagementEntity entity);
-	
-	public VendorManagementEntity isExist(String ownerName, String email);
-	
-	public List<VendorManagementEntity> findAll();
-	
-	public void updatedOtpByEmail(String email,int otp);
 
-	
+	public VendorManagementEntity isExist(String email, String otp);
+
+	public List<VendorManagementEntity> findAll();
+
+	public void updatedOtpByEmail(String email, String otp);
+
 }

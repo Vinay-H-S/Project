@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.email.EmailSender;
 import com.project.entity.VendorManagementEntity;
 import com.project.repository.VendorManagementRepository;
+import com.project.util.EmailSender;
+import com.project.util.OtpGenarator;
 
-@Service
+@Service(value = "loginService")
 public class VendorLoginServiceImpl implements VendorLoginService {
 
 	@Autowired
@@ -28,44 +29,45 @@ public class VendorLoginServiceImpl implements VendorLoginService {
 		List<VendorManagementEntity> entity = this.repository.findAll();
 		for (VendorManagementEntity ent : entity) {
 			if (ent.getEmail().equalsIgnoreCase(email)) {
+				System.out.println("Email is Verified");
 				return "";
-			} else {
-				return "User Exsit, login with your email";
 			}
 		}
-		return null;
+		return "*Please Register Account";
 	}
 
 	@Override
-	public String loginUsingEmailAndOtp(String email, int otp) {
+	public String loginOtpEmailMessage(String email) {
 		System.out.println("invoking the loginUsingEmailAndOtp in vendorLoginServiceImpl");
 
+		String otp = OtpGenarator.genarateOTP();
+
 		String subject = "One Time Password";
-		String text = "Your OTP for login";
+		String text = "Your OTP for login : " + otp;
 		String to = email;
 		String from = "vinayshudedar383@gmail.com";
 
-		this.emailSender.emailSender(to, from, subject, text);
+		boolean emailOtp = this.emailSender.emailSender(to, from, subject, text);
+		this.repository.updatedOtpByEmail(email, otp);
+		if (emailOtp) {
+			return "*OTP Sent Successfully";
+		}
 
 		return null;
 	}
 
 	@Override
-	public boolean updatedOtpByMail(String email) {
-		System.out.println("invoking the updatedOtpByEmail in loginSeriveImpl");
-		System.out.println("Generate OTP (One Time Password),");
-		int otp = (int) (Math.random() * 900000) + 100000;
-		System.out.println("4 digits OTP: " + otp);
-		
-		List<VendorManagementEntity> entity=this.repository.findAll();
-		for (VendorManagementEntity en : entity) {
-			if(en.getOtp().equals(otp)){
-				this.repository.updatedOtpByEmail(email, otp);
-				return true;
+	public String loginOtpAjax(String otp) {
+		System.out.println("invoking the loginOtpAjax in LoginImpl");
+		List<VendorManagementEntity> entity = this.repository.findAll();
+		for (VendorManagementEntity ent : entity) {
+			if (ent.getOtp().equals(otp)) {
+				return "*OTP Matched";
+			} else {
+				return "*OTP is not matching";
 			}
 		}
-		return true;
+		return null;
 	}
+
 }
-
-

@@ -76,7 +76,7 @@ public class VendorAjaxServiceImpl implements VendorAjaxService {
 			if(ent.getWebsite().equalsIgnoreCase(website)) {
 				return "*Webiste Already Exist";
 			}else {
-				System.out.println("Website is Does't Exist");
+				return "";
 			}
 		}
 		return null;

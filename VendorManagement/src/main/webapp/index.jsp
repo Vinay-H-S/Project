@@ -158,6 +158,7 @@ h2 {
 	#websiteErrorMsg, #emailMsg, #gstErrorMsg, #ownerNameErrorMsg,
 	#alternativeNoErrorMsg {
 	font-size: 14px;
+	font-weight: 600;
 }
 </style>
 
@@ -177,8 +178,8 @@ h2 {
 			<ul class="navbar-nav">
 				<li class="nav-item"><a href="home.jsp"
 					class="nav-link text-white">Home</a></li>
-				<li class="nav-item"><a href="signin.jsp" class="nav-link text-white">Sign
-						in</a></li>
+				<li class="nav-item"><a href="signin.jsp"
+					class="nav-link text-white">Sign in</a></li>
 				<li class="nav-item"><a href="index.jsp"
 					class="nav-link text-white">Register</a></li>
 			</ul>
@@ -197,7 +198,7 @@ h2 {
 				<div class="input-box">
 					<label>Vendor Name</label> <input type="text"
 						placeholder="enter your name" name="vendorName" id="vendorName"
-						onblur="validateName()" /> <span id="VendorNameErrorMsg"
+						onblur="validateName()" required/> <span id="VendorNameErrorMsg"
 						style="color: red;"></span>
 
 				</div>
@@ -205,13 +206,13 @@ h2 {
 				<div class="input-box">
 					<label>Location</label> <input type="text"
 						placeholder="current location" name="location" id="location"
-						onblur="validateLocation()" /> <span id="locationErrorMsg"
+						onblur="validateLocation()" required/> <span id="locationErrorMsg"
 						style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Gst number</label> <input type="text"
 						placeholder="enter gst number" name="gstNo" onblur="uniqueGst()"
-						id="gstNo" /> <span id="gstErrorMsg" style="color: red"></span>
+						id="gstNo" required/> <span id="gstErrorMsg" style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Company Start Date</label> <input type="date"
@@ -237,31 +238,31 @@ h2 {
 				<div class="input-box">
 					<label>Contact number</label> <input type="tel"
 						placeholder="contact number" name="contactNo"
-						onblur="uniqueConatctNo()" id="contactNo" /> <span
+						onblur="uniqueConatctNo()" id="contactNo" required/> <span
 						id="contactNoErrorMsg" style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Alternative number</label> <input type="tel"
 						placeholder="alternative number" name="alternativeNo"
-						onblur="validateAlternativeNo()" id="alternativeNumber" /> <span
+						onblur="validateAlternativeNo()" id="alternativeNumber" required/> <span
 						id="alternativeNoErrorMsg" style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Owner Name</label> <input type="text"
 						placeholder="enter real name" name="ownerName" id="ownerName"
-						onblur="validateOwnerName()" /> <span id="ownerNameErrorMsg"
+						onblur="validateOwnerName()" required/> <span id="ownerNameErrorMsg"
 						style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Email</label> <input type="email"
 						placeholder="enter your email" name="email" id="email"
-						onblur="uniqueMail()" /> <span id="emailMsg" style="color: red;"></span>
+						onblur="uniqueMail()" required/> <span id="emailMsg" style="color: red;"></span>
 				</div>
 
 				<div class="input-box">
 					<label>Website</label> <input type="text"
 						placeholder="website address" name="website" id="website"
-						onblur="uniqueWebsite()" /> <span id="websiteErrorMsg"
+						onblur="uniqueWebsite()" required/> <span id="websiteErrorMsg"
 						style="color: red"></span>
 				</div>
 				<div class="button-container m-auto pe-5 ">
@@ -272,7 +273,8 @@ h2 {
 						</p>
 					</div>
 					<div>
-						<button type="submit" onclick="openPopup()" id="registerButton">Register</button>
+						<button type="submit" onclick="openPopup()" id="registerButton"
+							disabled="disabled">Register</button>
 					</div>
 				</div>
 			</div>
@@ -395,9 +397,11 @@ function uniqueMail() {
 
     if(website ==""){
         document.getElementById("websiteErrorMsg").innerHTML = "*Website can't be blank";
+        button.setAttribute("disabled","");
         
     }else if(website.length < 11 || website.length > 30 ){
         document.getElementById("websiteErrorMsg").innerHTML = "*Website should be in character";
+        button.setAttribute("disabled","");
       
     }else if(website != ""){
         document.getElementById("websiteErrorMsg").innerHTML = "";
@@ -407,11 +411,15 @@ function uniqueMail() {
             + website);
         xhttp.send();
         xhttp.onload = function () {
-            document.getElementById("websiteErrorMsg").innerHTML = this.responseText;
+         const response=   document.getElementById("websiteErrorMsg").innerHTML = this.responseText;
+         if(response == ""){
+            button.removeAttribute("disabled");
+         }else{
+            button.setAttribute("disabled","");
+         }
         } 
-    }else{
-    	button.removeAttribute("disabled");
     }
+    
 }
 		
     //vendorName

@@ -4,8 +4,8 @@ public interface VendorLoginService {
 
 	public String emailLoginAjax(String email);
 	
-	public String loginUsingEmailAndOtp(String email,int otp);
+	public String loginOtpEmailMessage(String email);
 	
-	public boolean updatedOtpByMail(String email);
+	public String loginOtpAjax(String otp);
 	
 }

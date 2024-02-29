@@ -1,6 +1,7 @@
 package com.project.entity;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "vendormanagement")
 @Data
-@NamedQuery(name = "isExistUser", query = "select ent from VendorManagementEntity ent where ent.ownerName=:owner or ent.email=:email")
+@NamedQuery(name = "isExistUser", query = "select ent from VendorManagementEntity ent where ent.email=:email or ent.otp=:otp")
 @NamedQuery(name = "findAll",query = "select ent from VendorManagementEntity ent")
 @NamedQuery(name="updatedOtpByEmail",query = "select ent from VendorManagementEntity ent where ent.email=:email")
 @NoArgsConstructor
@@ -70,18 +71,16 @@ public class VendorManagementEntity {
 	private String createdBy;
 
 	@Column(name = "v_created_date")
-	private LocalDate createdDate;
+	private LocalDateTime createdDate;
 
 	@Column(name = "v_updated_by")
 	private String updatedBy;
 
 	@Column(name = "v_updated_date")
-	private LocalDate updatedDate;
+	private LocalDateTime updatedDate;
 
 	@Column(name="v_otp")
-	private Integer otp;
-//	
-////	private boolean active;// for active the user
-////	
-//	private LocalDateTime otpGenratedTime;
+	private String otp;
+	@Column(name = "v_otpGenrated_time")
+	private LocalDateTime otpGenratedTime;
 }

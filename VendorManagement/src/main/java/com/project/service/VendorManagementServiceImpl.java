@@ -1,8 +1,8 @@
 package com.project.service;
 
+import java.util.List;
 import java.util.Properties;
 
-import org.hibernate.type.LocalDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,14 +32,14 @@ public class VendorManagementServiceImpl implements VendorManagementService {
 	}
 
 	@Override
-	public String isExist(String ownerName, String email) {
+	public String isExist(String email, String otp) {
 		System.out.println("invoking the isExist in repository");
-		VendorManagementEntity entity = this.repo.isExist(ownerName, email);
+		VendorManagementEntity entity = this.repo.isExist(email, otp);
 		if (entity != null) {
-			if (entity.getOwnerName().equals(ownerName) && entity.getEmail().equals(email)) {
+			if (entity.getEmail().equals(email) && entity.getOtp().equals(otp)) {
 				return "User Already Exist";
 			} else {
-				System.err.println("Details not found.....save the details");
+				System.err.println("Details not found.....");
 			}
 		}
 		return null;
@@ -48,7 +48,7 @@ public class VendorManagementServiceImpl implements VendorManagementService {
 	@Override
 	public boolean sendEmail(String email) {
 
-		System.out.println("Sending the msg");
+		System.out.println("Sending the sendingMsg");
 
 		String portNumber = "587";
 		String hostName = "smtp.office365.com";
@@ -73,25 +73,24 @@ public class VendorManagementServiceImpl implements VendorManagementService {
 			}
 		});
 
-		MimeMessage message = new MimeMessage(session);
-		try {
-			message.setFrom(new InternetAddress(fromEmail));
-			message.setSubject("Registration Form");
-			message.setText("Registration Completed"+ "${vendorName}");
+		List<VendorManagementEntity> entity = this.repo.findAll();
+		for (VendorManagementEntity ent : entity) {
+			MimeMessage message = new MimeMessage(session);
+			try {
+				message.setFrom(new InternetAddress(fromEmail));
+				message.setSubject("Registration Form");
+				message.setText("Welcome to Vendor Management :" + ent.getOwnerName()+ " Thank you for register");
+				message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+				Transport.send(message);
+				System.out.println("registration successfull");
+				return true;
 
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-			Transport.send(message);
+			}
 
-			return true;
-
+			catch (MessagingException e) {
+				e.printStackTrace();
+			}
 		}
-
-		catch (MessagingException e) {
-			e.printStackTrace();
-		}
-
 		return false;
 	}
-
-
 }
