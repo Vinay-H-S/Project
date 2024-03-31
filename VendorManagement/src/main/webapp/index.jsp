@@ -198,7 +198,7 @@ h2 {
 				<div class="input-box">
 					<label>Vendor Name</label> <input type="text"
 						placeholder="enter your name" name="vendorName" id="vendorName"
-						onblur="validateName()" required/> <span id="VendorNameErrorMsg"
+						onblur="validateName()" required /> <span id="VendorNameErrorMsg"
 						style="color: red;"></span>
 
 				</div>
@@ -206,13 +206,13 @@ h2 {
 				<div class="input-box">
 					<label>Location</label> <input type="text"
 						placeholder="current location" name="location" id="location"
-						onblur="validateLocation()" required/> <span id="locationErrorMsg"
-						style="color: red"></span>
+						onblur="validateLocation()" required /> <span
+						id="locationErrorMsg" style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Gst number</label> <input type="text"
 						placeholder="enter gst number" name="gstNo" onblur="uniqueGst()"
-						id="gstNo" required/> <span id="gstErrorMsg" style="color: red"></span>
+						id="gstNo" required /> <span id="gstErrorMsg" style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Company Start Date</label> <input type="date"
@@ -238,31 +238,32 @@ h2 {
 				<div class="input-box">
 					<label>Contact number</label> <input type="tel"
 						placeholder="contact number" name="contactNo"
-						onblur="uniqueConatctNo()" id="contactNo" required/> <span
+						onblur="uniqueConatctNo()" id="contactNo" required /> <span
 						id="contactNoErrorMsg" style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Alternative number</label> <input type="tel"
 						placeholder="alternative number" name="alternativeNo"
-						onblur="validateAlternativeNo()" id="alternativeNumber" required/> <span
-						id="alternativeNoErrorMsg" style="color: red"></span>
+						onblur="validateAlternativeNo()" id="alternativeNumber" required />
+					<span id="alternativeNoErrorMsg" style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Owner Name</label> <input type="text"
 						placeholder="enter real name" name="ownerName" id="ownerName"
-						onblur="validateOwnerName()" required/> <span id="ownerNameErrorMsg"
-						style="color: red"></span>
+						onblur="validateOwnerName()" required /> <span
+						id="ownerNameErrorMsg" style="color: red"></span>
 				</div>
 				<div class="input-box">
 					<label>Email</label> <input type="email"
 						placeholder="enter your email" name="email" id="email"
-						onblur="uniqueMail()" required/> <span id="emailMsg" style="color: red;"></span>
+						onblur="uniqueMail()" required /> <span id="emailMsg"
+						style="color: red;"></span>
 				</div>
 
 				<div class="input-box">
 					<label>Website</label> <input type="text"
 						placeholder="website address" name="website" id="website"
-						onblur="uniqueWebsite()" required/> <span id="websiteErrorMsg"
+						onblur="uniqueWebsite()" required /> <span id="websiteErrorMsg"
 						style="color: red"></span>
 				</div>
 				<div class="button-container m-auto pe-5 ">

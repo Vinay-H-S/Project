@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Document</title>
+<title>Login Page</title>
 <!-- Bootstrap CSS -->
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
@@ -110,11 +110,10 @@ h2 {
 	text-transform: uppercase;
 }
 
-#emailMsg,#otpErrMsg {
+#emailMsg, #otpErrMsg {
 	font-size: 14px;
 	font-weight: 550;
 }
-
 </style>
 </head>
 
@@ -154,19 +153,11 @@ h2 {
 						onblur="loginMail()" /> <span id="emailMsg" style="color: red;"></span>
 				</div>
 
-				<!-- OTP FOR LOGIN -->
-				<div class="input-box">
-					<label>OTP</label> <input type="number"
-						placeholder="please enter your otp" id="otp" name="otp"
-						onchange="validateOTP()" /> <Span id="otpErrMsg"
-						style="color: red"></Span>
-				</div>
-
-				<button type="button" class="btn btn-primary" id="otpButton"
-					onclick="genarateOtp()" disabled="disabled">Generate OTP</button>
+				<button type="button" class="btn btn-success" id="otpButton"
+					onclick="sendOtp()" disabled="disabled">Send OTP</button>
 
 				<button type="submit" class="btn btn-secondary" id="loginBtn"
-					disabled="disabled">Log in</button>
+					 onclick="profileView()">Verify</button>
 
 			</div>
 
@@ -210,7 +201,7 @@ h2 {
 		}
 
 		//genarateOtp
-		function genarateOtp() {
+		function sendOtp() {
 			const email = document.getElementById("email").value;
 
 			const xhttp = new XMLHttpRequest();
@@ -225,39 +216,19 @@ h2 {
 
 		}
 
-		//loginOtpAjax
-		function validateOTP() {
-			const otp = document.getElementById("otp").value;
-			const loginButton = document.getElementById("loginBtn");
+		
+		function profileView() {
+			const email = document.getElementById("email").value;
 
-			if (otp == null || otp == "") {
-				console.log("Otp Can't be empty");
-				document.getElementById("otpErrMsg").innerHTML = "*OTP Can't Be Empty";
-				loginButton.setAttribute("disabled", "");
-			} else if (otp.length > 6 || otp.length < 6) {
-				console.log("Otp Should Be Format");
-				document.getElementById("otpErrMsg").innerHTML = "*OTP Should Be in Format";
-				loginButton.setAttribute("disabled", "");
-			} else if (otp != "") {
+			if (emaill != "") {
 
 				const xhttp = new XMLHttpRequest();
-
 				xhttp.open("GET",
-						"http://localhost:8080/VendorManagement/loginOtpAjax/"
-								+ otp);
+						"http://localhost:8080/VendorManagement/profileDetail/"
+								+ email);
+
 				xhttp.send();
-
-				xhttp.onload = function() {
-					const response = document.getElementById("otpErrMsg").innerHTML = this.responseText;
-					if (response == "*OTP Matched") {
-						loginButton.removeAttribute("disabled");
-					} else {
-						loginButton.setAttribute("disabled", "");
-					}
-
-				}
 			}
-
 		}
 	</script>
 	<script

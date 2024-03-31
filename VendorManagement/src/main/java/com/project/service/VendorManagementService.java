@@ -10,4 +10,5 @@ public interface VendorManagementService {
 	
 	public boolean sendEmail(String email);
 	
+	
 }
