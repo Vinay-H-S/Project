@@ -1,6 +1,5 @@
 package com.project.repository;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -9,16 +8,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-
-import org.hibernate.boot.spi.InFlightMetadataCollector.EntityTableXref;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-
-import com.project.entity.AdminControlEntity;
 import com.project.entity.VendorManagementEntity;
 import com.project.util.EMFUtil;
 
@@ -26,10 +19,7 @@ import com.project.util.EMFUtil;
 public class VendorManagementRepositoryImpl implements VendorManagementRepository {
 
 	@Autowired
-	private final EntityManagerFactory emf = EMFUtil.getManagerFactory();
-
-	@Autowired
-	private AdminServiceRepository adminRepo;
+	private EntityManagerFactory emf = EMFUtil.getManagerFactory();
 
 	@Override
 	public boolean save(VendorManagementEntity entity) {
@@ -40,10 +30,6 @@ public class VendorManagementRepositoryImpl implements VendorManagementRepositor
 			et.begin();
 			System.out.println("Et begin");
 			em.persist(entity);
-			entity.setCreatedBy(entity.getOwnerName());
-			entity.setCreatedDate(LocalDateTime.now());
-			entity.setStatus("Pending");
-			entity.setFailedAttempt(0);
 			et.commit();
 			System.out.println("Data is Committed");
 		} catch (PersistenceException pe) {
@@ -207,7 +193,7 @@ public class VendorManagementRepositoryImpl implements VendorManagementRepositor
 	}
 
 	@Override
-	public void approvedStatus(int id) {
+	public void approvedStatus(int vendorId) {
 		System.out.println("invoking the approvedStatus() in repo");
 		EntityManager em = this.emf.createEntityManager();
 		EntityTransaction et = em.getTransaction();
@@ -215,7 +201,7 @@ public class VendorManagementRepositoryImpl implements VendorManagementRepositor
 		try {
 			et.begin();
 			Query query = em.createNamedQuery("updateUpdatedByAndUpdatedDateById");
-			query.setParameter("id", id);
+			query.setParameter("id", vendorId);
 			Object obj = query.getSingleResult();
 			entity = (VendorManagementEntity) obj;
 			System.out.println(entity);
@@ -236,7 +222,7 @@ public class VendorManagementRepositoryImpl implements VendorManagementRepositor
 	}
 
 	@Override
-	public void rejectStatus(int id) {
+	public void rejectStatus(int vendorId) {
 		System.out.println("invoking the approvedStatus() in repo");
 		EntityManager em = this.emf.createEntityManager();
 		EntityTransaction et = em.getTransaction();
@@ -244,7 +230,7 @@ public class VendorManagementRepositoryImpl implements VendorManagementRepositor
 		try {
 			et.begin();
 			Query query = em.createNamedQuery("updateUpdatedByAndUpdatedDateById");
-			query.setParameter("id", id);
+			query.setParameter("id", vendorId);
 			Object obj = query.getSingleResult();
 			entity = (VendorManagementEntity) obj;
 			System.out.println(entity);
@@ -272,6 +258,7 @@ public class VendorManagementRepositoryImpl implements VendorManagementRepositor
 			Query query = em.createNamedQuery("getEntityByEmail");
 			query.setParameter("email", email);
 			entity = (VendorManagementEntity) query.getSingleResult();
+			System.out.println(entity);
 			return entity;
 		} catch (PersistenceException e) {
 			System.out.println("PersistenceException in :" + e.getMessage());
@@ -283,19 +270,15 @@ public class VendorManagementRepositoryImpl implements VendorManagementRepositor
 	}
 
 	@Override
-	public VendorManagementEntity getVendorEntityById(int id) {
+	public VendorManagementEntity getVendorEntityById(int vendorId) {
 		System.out.println("invoking the getVendorEntityById() in repo");
 		EntityManager em = this.emf.createEntityManager();
 		VendorManagementEntity ent = null;
 		try {
 			System.out.println("ET begin()");
 			Query query = em.createNamedQuery("getEntityById");
-			query.setParameter("id", id);
+			query.setParameter("id", vendorId);
 			ent = (VendorManagementEntity) query.getSingleResult();
-			if (ent != null) {
-				em.persist(ent);
-				System.out.println("Data is updated");
-			}
 			System.out.println(ent);
 			return ent;
 		} catch (PersistenceException e) {
@@ -308,8 +291,8 @@ public class VendorManagementRepositoryImpl implements VendorManagementRepositor
 	}
 
 	@Override
-	public void updateVendorEntity(int id, VendorManagementEntity ent) {
-		System.out.println("invoking thr updateVendorEntity() in repo");
+	public void saveImage(int vendorId, String profileImage) {
+		System.out.println("invoking the saveImage() in vandorRepo");
 		EntityManager em = this.emf.createEntityManager();
 		EntityTransaction et = em.getTransaction();
 		VendorManagementEntity entity = null;
@@ -317,20 +300,92 @@ public class VendorManagementRepositoryImpl implements VendorManagementRepositor
 			et.begin();
 			System.out.println("ET begin()");
 			Query query = em.createNamedQuery("getEntityById");
-			query.setParameter("id", id);
+			query.setParameter("id", vendorId);
 			entity = (VendorManagementEntity) query.getSingleResult();
-			if(entity != null) {
-				em.persist(ent);
+			if (entity != null) {
+				entity.setProfileImage(profileImage);
+				em.merge(entity);
 			}
 			et.commit();
 		} catch (PersistenceException e) {
+			System.out.println("PersistenceException :" + e.getMessage());
 			et.rollback();
-			System.out.println("PersistenceException : " + e.getMessage());
 		} finally {
 			em.close();
 			System.out.println("Costly resources are closed");
 		}
-
 	}
 
+	@Override
+	public void updateVendorEntityById(int vendorId, VendorManagementEntity entity) {
+		System.out.println("invoking the updateVendoEntity");
+		EntityManager em = this.emf.createEntityManager();
+		EntityTransaction et = em.getTransaction();
+		try {
+			et.begin();
+			System.out.println("ET begin()");
+			VendorManagementEntity updateEntity = em.find(VendorManagementEntity.class, vendorId);
+
+			if (updateEntity != null) {
+				updateEntity.setVendorName(entity.getVendorName());
+				updateEntity.setLocation(entity.getLocation());
+				updateEntity.setGstNo(entity.getGstNo());
+				updateEntity.setCompanyStartDate(entity.getCompanyStartDate());
+				updateEntity.setOwnerName(entity.getOwnerName());
+				updateEntity.setServiceType(entity.getServiceType());
+				updateEntity.setContactNo(entity.getContactNo());
+				updateEntity.setAlternativeNo(entity.getAlternativeNo());
+				updateEntity.setEmail(entity.getEmail());
+				updateEntity.setWebsite(entity.getWebsite());
+			}
+			em.merge(updateEntity);
+			System.out.println("Data is updated");
+			et.commit();
+			System.out.println("Data is committed");
+		} catch (PersistenceException e) {
+			System.out.println("PersistenceException :" + e.getMessage());
+			et.rollback();
+		} finally {
+			em.close();
+			System.out.println("Costly resources are closed");
+		}
+	}
+
+	@Override
+	public VendorManagementEntity findAllVendorEntityByEmail(String email) {
+		System.out.println("findAllVendorEntityByEmail in repoImpl");
+		EntityManager em = this.emf.createEntityManager();
+		VendorManagementEntity entity = null;
+		try {
+			Query query = em.createNamedQuery("getEntityByEmail");
+			query.setParameter("email", email);
+			entity = (VendorManagementEntity) query.getSingleResult();
+			System.out.println(entity);
+			return entity;
+		} catch (PersistenceException e) {
+			System.out.println("PersistenceException :" + e.getMessage());
+		} finally {
+			em.close();
+			System.out.println("Costly resources are closed");
+		}
+		return entity;
+	}
+
+	@Override
+	public int getVendorIdbyEmail(String email) {
+		System.out.println("getVendorIdbyEmail in repoImpl");
+		EntityManager em = this.emf.createEntityManager();
+		try {
+			Query query = em.createNamedQuery("getVendorIdByEmail");
+			query.setParameter("email", email);
+			int ids = (int) query.getSingleResult();
+			return ids;
+		} catch (PersistenceException e) {
+			System.out.println("PersistenceException :" + e.getMessage());
+		} finally {
+			em.close();
+			System.out.println("Costly resources are closed");
+		}
+		return 0;
+	}
 }

@@ -5,17 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import com.project.entity.AdminControlEntity;
 import com.project.entity.VendorManagementEntity;
 import com.project.repository.AdminServiceRepository;
 import com.project.repository.VendorManagementRepository;
+
 
 @EnableWebMvc
 @Controller
@@ -27,6 +25,7 @@ public class AdminController {
 
 	@Autowired
 	private VendorManagementRepository vendorRepository;
+
 
 	public AdminController() {
 		System.out.println("Creating the admincontroller");
@@ -55,8 +54,10 @@ public class AdminController {
 	public String adminPage(Model model) {
 		System.out.println("adminPage() in adminController");
 		List<VendorManagementEntity> vendorEntity = this.vendorRepository.findAll();
-		if (vendorEntity != null) {
-			model.addAttribute("ent", vendorEntity);
+		for (VendorManagementEntity vendorManagementEntity : vendorEntity) {
+			if (vendorEntity != null) {
+				model.addAttribute("ent", vendorManagementEntity);
+			}
 		}
 
 		return "admin";
@@ -86,4 +87,6 @@ public class AdminController {
 		}
 		return "redirect:/admin";
 	}
+
+	
 }

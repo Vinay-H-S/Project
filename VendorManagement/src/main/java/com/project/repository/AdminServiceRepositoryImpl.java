@@ -23,8 +23,6 @@ public class AdminServiceRepositoryImpl implements AdminServiceRepository {
 	@Autowired
 	private EntityManagerFactory emf = EMFUtil.getManagerFactory();
 
-	@Autowired
-	private VendorManagementRepository repository;
 
 	@Override
 	public List<AdminControlEntity> findAll() {
@@ -34,7 +32,6 @@ public class AdminServiceRepositoryImpl implements AdminServiceRepository {
 		try {
 			Query query = em.createNamedQuery("findAdmins");
 			list = query.getResultList();
-			System.out.println("Data Found");
 			return list;
 		} catch (PersistenceException e) {
 			System.out.println("Persistence Exception :" + e.getMessage());

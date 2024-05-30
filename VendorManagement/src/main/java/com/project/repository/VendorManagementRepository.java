@@ -23,13 +23,22 @@ public interface VendorManagementRepository {
 
 	public void expiredOtpAndAttempt(String otp, Integer failedAttempt, String email);
 
-	public void approvedStatus(int id);
+	public void approvedStatus(int vendorId);
 
-	public void rejectStatus(int id);
+	public void rejectStatus(int vendorId);
 
 	public VendorManagementEntity getVendorEntityByEmail(String email);
 
-	public VendorManagementEntity getVendorEntityById(int id);
-
-	public void updateVendorEntity(int id,VendorManagementEntity ent);
+	public VendorManagementEntity getVendorEntityById(int vendorId);
+	
+	public void updateVendorEntityById(int vendorId,VendorManagementEntity entity);
+	
+	public void saveImage(int vendorId,String profileImage);
+	
+	public VendorManagementEntity findAllVendorEntityByEmail(String email);
+	
+	public int getVendorIdbyEmail(String email);
+	
+	
+	
 }

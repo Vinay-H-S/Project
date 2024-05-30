@@ -1,38 +1,39 @@
 package com.project.controller;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
-
 import java.time.LocalTime;
 import java.util.List;
-
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import com.project.entity.VendorManagementEntity;
 import com.project.repository.VendorManagementRepository;
 import com.project.service.VendorLoginService;
-import com.project.service.VendorManagementService;
-import com.project.util.OtpGenarator;
 
 @EnableWebMvc
 @Controller
 @RequestMapping("/")
 @MultipartConfig
 public class LoginController {
-
-	@Autowired
-	private VendorManagementService service;
 
 	@Autowired
 	private VendorLoginService loginService;
@@ -101,49 +102,69 @@ public class LoginController {
 		return "otpverification";
 	}
 
-	@RequestMapping("/login")
-	public String login(Model model) {
-		List<VendorManagementEntity> entities = this.repository.findAll();
-		for (VendorManagementEntity entity : entities) {
+	@RequestMapping(path = "/login")
+	public String login(Model model, @PathVariable int vendorId) {
+		VendorManagementEntity entity = this.repository.getVendorEntityById(vendorId);
+		model.addAttribute("entites", entity);
+		return "login";
+	}
+
+	@RequestMapping(path = "/editvendorentity/{vendorId}")
+	public String editVendor(@PathVariable int vendorId, Model model) {
+		System.out.println("invoking the editVendor() inloginController");
+		VendorManagementEntity entity = this.repository.getVendorEntityById(vendorId);
+		if (entity.getVendorId() == vendorId) {
 			model.addAttribute("entites", entity);
+			return "editvendor";
 		}
 		return "login";
 	}
 
-	@RequestMapping(value = "/editvendor")
-	public String edit(Model model) {
-		System.out.println("invoking the edit() inloginController");
-		List<VendorManagementEntity> entities = this.repository.findAll();
-		for (VendorManagementEntity entity : entities) {
-			model.addAttribute("entites", entity);
-		}
-		return "editvendor";
-	}
+	@RequestMapping(value = "/uploadprofile/{vendorId}", method = RequestMethod.POST)
+	public String imageUpload(@RequestParam("profileImage") MultipartFile file, @PathVariable int vendorId, Model model,
+			HttpServletRequest req) throws IOException {
+		String originalFileName = file.getOriginalFilename();
+		VendorManagementEntity entity = new VendorManagementEntity();
+		entity.setProfileImage(originalFileName);
+		this.repository.saveImage(vendorId, originalFileName);
+		System.out.println("Image is Saved");
+		String path = "D:\\Project\\VendorManagement\\src\\main\\resources\\images\\" + originalFileName;
 
-	@RequestMapping(path = "/editvendor/{id}")
-	public String editVendor(@PathVariable int id, Model model) {
-		System.out.println("invoking the editVendor() inloginController");
-		VendorManagementEntity entity = this.repository.getVendorEntityById(id);
-		if (entity.getId() == id) {
-			model.addAttribute("entites", entity);
-			return "editvendor";
-		}
+		byte[] bytes = file.getBytes();
+
+		FileOutputStream fileOutputStream = new FileOutputStream(path);
+		System.out.println("Image is Saved");
+		fileOutputStream.write(bytes);
+		fileOutputStream.close();
+		System.out.println(originalFileName);
 		return "redirect:/login";
 	}
 
-	@RequestMapping(path = "/updateVendor", method = RequestMethod.POST)
-	public String updateVendor(@PathVariable int id, VendorManagementEntity ent) {
+	@GetMapping(value = "/displayImages")
+	public void displayImages(@RequestParam int vendorId, HttpServletResponse response) throws IOException {
+		System.out.println("invoking the displayImages() in loginCotroller");
+		List<VendorManagementEntity> entites = this.repository.findAll();
+		for (VendorManagementEntity entity : entites) {
+			if (entity.getVendorId() == vendorId) {
+				String image = entity.getProfileImage();
+				File file = new File("D:\\Project\\VendorManagement\\src\\main\\resources\\images\\" + image);
+				System.out.println(file);
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+				ServletOutputStream outputStream = response.getOutputStream();
+				IOUtils.copy(inputStream, outputStream);
+				response.flushBuffer();
+			}
+
+		}
+
+	}
+
+	@RequestMapping(path = "/updatevendor/{vendorId}")
+	public String updateVendor(@PathVariable int vendorId, @ModelAttribute VendorManagementEntity entity, Model model) {
 		System.out.println("invoking the updateVendor() in logincontroller");
-		this.repository.updateVendorEntity(id, ent);
-		System.out.println("Data is updated");
-
+		this.repository.updateVendorEntityById(vendorId, entity);
+		model.addAttribute("entites", entity);
 		return "redirect:/login";
-	}
-
-	@RequestMapping(value = "/uploadImg", method = RequestMethod.POST)
-	public String imageUpload(MultipartFile profileImage) {
-		System.err.println(profileImage.getOriginalFilename());
-		return "editvendor";
 	}
 
 }

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+
+
 <!doctype html>
 <html lang="en">
 
@@ -27,7 +29,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 100vh;
+	height: 92vh;
 	background-color: #fffe;
 }
 
@@ -36,7 +38,7 @@ body {
 	padding: 28px;
 	margin: 0 28px;
 	box-shadow: 0 25px 30px #ABB2B9;
-	margin-top: 55px;
+	height: 86vh;
 }
 
 h2 {
@@ -148,6 +150,18 @@ h2 {
 	font-size: 14px;
 	font-weight: 600;
 }
+
+.display {
+	font-weight: 600;
+	margin-bottom: 0;
+	padding: 0;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
 </style>
 
 </head>
@@ -157,9 +171,10 @@ h2 {
 	<div class="container">
 		<!-- Navbar -->
 
-		<form action="updateVendor" method="post">
+		<form
+			action="${pageContext.request.contextPath}/updatevendor/${entites.vendorId}"
+			method="post">
 			<h2>EDIT PROFILE</h2>
-			<input type="hidden" name=id >
 			<div class="content">
 				<div class="input-box">
 					<label>Vendor Name</label> <input type="text"
@@ -233,8 +248,8 @@ h2 {
 				<div class="input-box">
 					<label>Website</label> <input type="text"
 						placeholder="website address" name="website" id="website"
-						onblur="uniqueWebsite()" value="${entites.website}" required />
-					<span id="websiteErrorMsg" style="color: red"></span>
+						onblur="uniqueWebsite()" value="${entites.website}" required /> <span
+						id="websiteErrorMsg" style="color: red"></span>
 				</div>
 				<div class="button-container m-auto pe-5 ">
 					<div>
@@ -416,6 +431,17 @@ h2 {
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+	<footer class="footer">
+		<div class="card-footer text-black text-center">
+			<p class="display">VENDOR MANAGEMENT</p>
+			<small class="text-black-50 display">&copy; Copyrights by
+				X-Workz. All rights reserved</small>
+		</div>
+	</footer>
+
 </body>
+
+
 
 </html>

@@ -18,7 +18,6 @@ public class VendorAjaxServiceImpl implements VendorAjaxService {
 		System.out.println("invoking the VendorAjaxService Method");
 	}
 
-	// EmailAjax
 
 	@Override
 	public String findByEmailAjax(String email) {
@@ -35,7 +34,7 @@ public class VendorAjaxServiceImpl implements VendorAjaxService {
 		return null;
 	}
 
-	// GstAjax
+
 
 	@Override
 	public String findByGst(String gstNo) {
@@ -52,6 +51,7 @@ public class VendorAjaxServiceImpl implements VendorAjaxService {
 		return null;
 	}
 	
+	
 	@Override
 	public String findByContactNo(Long contactNo) {
 		System.out.println("invoking the findByContactNo");
@@ -66,7 +66,7 @@ public class VendorAjaxServiceImpl implements VendorAjaxService {
 		return null;
 	}
 	
-	//Website Ajax
+
 	
 	@Override
 	public String findByWebsite(String website) {

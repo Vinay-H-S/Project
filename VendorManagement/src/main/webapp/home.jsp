@@ -24,12 +24,26 @@
 	border-radius: 12px;
 	text-transform: uppercase;
 }
+
+.display {
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
 </style>
 
 <body>
 	<!-- Navbar -->
 	<nav class="navbar fixed-top navbar-expand-lg  navbar-dark p-md-3">
-		<a href="#" class="navbar-brand pt-2">Vendor Management</a>
+		<a class="navbar-brand" href="#"> <img
+			src="https://tse4.mm.bing.net/th?id=OIP.3bKZlDVBAtAh8DitadnD4AHaHa&pid=Api&P=0&h=180"
+			width="40" height="40" class="d-inline-block align-top" alt="Logo">
+		</a> <a href="#" class="navbar-brand pt-2">Vendor Management</a>
 		<button type="button" class="navbar-toggler" data-bs-target="#navbar"
 			data-bs-toggle="collapse" aria-controls="navbar"
 			aria-expanded="false" aria-label="Toggle Navbar">
@@ -57,6 +71,14 @@
 			<h1 class="text-white">VENDOR MANAGEMENT</h1>
 		</div>
 	</div>
+
+	<footer class="footer">
+		<div class="card-footer text-black text-center bg-white">
+			<p class="display">VENDOR MANAGEMENT</p>
+			<small class="text-black-50 display">&copy; Copyrights by
+				X-Workz. All rights reserved</small>
+		</div>
+	</footer>
 
 
 </body>

@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,15 +23,16 @@ import lombok.NoArgsConstructor;
 @NamedQuery(name = "updateFailedAttemptByEmail", query = "select ent from VendorManagementEntity ent where ent.email=:email")
 @NamedQuery(name = "updateFailedAccountByEmail", query = "select ent from VendorManagementEntity ent where ent.email=:email")
 @NamedQuery(name = "getEntityByEmail", query = "select ent from VendorManagementEntity ent where ent.email=:email")
-@NamedQuery(name = "getEntityById",query = "select ent from VendorManagementEntity ent where ent.id=:id")
-@NamedQuery(name = "updateUpdatedByAndUpdatedDateById",query = "select ent from VendorManagementEntity ent where ent.id=:id")
+@NamedQuery(name = "getEntityById",query = "select ent from VendorManagementEntity ent where ent.vendorId=:id")
+@NamedQuery(name = "updateUpdatedByAndUpdatedDateById",query = "select ent from VendorManagementEntity ent where ent.vendorId=:id")
+@NamedQuery(name="getVendorIdByEmail",query = "select ent.vendorId from VendorManagementEntity ent where ent.email=:email")
 @NoArgsConstructor
 public class VendorManagementEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "v_id")
-	private int id;
+	private int vendorId;
 
 	@Column(name = "v_name")
 	private String vendorName;
@@ -94,7 +94,7 @@ public class VendorManagementEntity {
 	@Column(name = "status")
 	private String status;
 	
-	@Column(name = "v_profileimage")
+	@Column(name="profile_image")
 	private String profileImage;
 
 }

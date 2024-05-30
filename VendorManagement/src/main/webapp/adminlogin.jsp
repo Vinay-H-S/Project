@@ -114,6 +114,17 @@ h2 {
 	font-size: 14px;
 	font-weight: 550;
 }
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+.display {
+	font-weight: 600;
+	margin-bottom: 0;
+}
 </style>
 </head>
 
@@ -171,6 +182,7 @@ h2 {
 
 	</div>
 	<script type="text/javascript">
+	
 	//USERNAME AJAX
 	function uniqueUserName() {
     const userName = document.getElementById("userName").value;
@@ -244,6 +256,14 @@ h2 {
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
 
+	<footer class="footer">
+		<div class="card-footer text-black text-center">
+			<p class="display">VENDOR MANAGEMENT</p>
+			<small class="text-black-50 display">&copy; Copyrights by
+				X-Workz. All rights reserved</small>
+		</div>
+	</footer>
 </body>
+
 
 </html>

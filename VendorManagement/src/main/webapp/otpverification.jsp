@@ -96,6 +96,17 @@ h5 {
 	color: blue;
 }
 
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+.display {
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
 .closeLink {
 	font-weight: 700;
 	text-decoration: none;
@@ -223,6 +234,15 @@ h5 {
 		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+
+
+	<footer class="footer">
+		<div class="card-footer text-black text-center">
+			<p class="display">VENDOR MANAGEMENT</p>
+			<small class="text-black-50 display">&copy; Copyrights by
+				X-Workz. All rights reserved</small>
+		</div>
+	</footer>
 
 </body>
 

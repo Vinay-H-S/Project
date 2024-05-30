@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<!-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -282,6 +282,71 @@ body {
 		text-align: left;
 	}
 }
+
+.container {
+	background-color: #463f43;
+	top: 50%;
+	left: 50%;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	max-width: 450px;
+}
+
+.container h1, hr {
+	color: black;
+}
+
+.popup {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	display: none;
+}
+
+.popup-content {
+	height: 550px;
+	width: 500px;
+	background-color: white;
+	padding: 20px;
+	position: relative;
+}
+
+input {
+	margin: 20px auto;
+	display: block;
+	width: 100%;
+	padding: 6px;
+	border: 1px solid grey;
+}
+
+.close {
+	text-decoration: none;
+	font-size: 20px;
+	font-weight: 600;
+	color: black;
+	position: absolute;
+	top: -19px;
+	right: -10px;
+	height: 20px;
+}
+
+#placeOrder {
+	text-decoration: none;
+	background-image: linear-gradient(#28e341, #257730);
+	color: white;
+	border-radius: 5px;
+}
+
+.wrapper {
+	font-family: sans-serif;
+	padding: 7px;
+}
 </style>
 </head>
 
@@ -294,12 +359,9 @@ body {
 		<div class="slide">
 			<h1>MENU</h1>
 			<ul>
-				<li><a href="#"><i class="fa fa-tv"></i>Dashboard</a></li>
-				<li><a href="getProductsDetails"><i class="fa fa-folder"></i>Products</a></li>
-				<li><a href="#"><i class="fa fa-heart"></i>Saved</a></li>
+				<li><a href="admin"><i class="fa fa-tv"></i>Dashboard</a></li>
 				<li><a href="#"><i class="fa fa-cogs"></i>Settings</a></li>
-				<li><a href="adminlogin.jsp"><i
-						class="fa fa-right-from-bracket"></i>Log-out</a></li>
+				<li><a href="admin"><i class="fa fa-right-from-bracket"></i>Log-out</a></li>
 			</ul>
 		</div>
 	</label>
@@ -307,69 +369,112 @@ body {
 
 		<span> <i class="fa fa-clock mt-3 " id="current-time">LOGED
 				TIME</i></span> <label> <input type="text" class="form-control"
-			id="vendorInput" onkeyup="search()" placeholder="Please search here">
-		</label>
+			id="orderInput" onkeyup="search()" placeholder="Please search here">
+		</label> <input type="hidden" name="email" value="${entites.email}">
 
 
 
-
-		<table class="table" id="vendorTable">
+		<table class="table" id="orderTable">
 			<thead>
 				<tr>
-					<th>Id</th>
+					<th>Product ID</th>
 					<th>Vendor Name</th>
-					<th>Location</th>
-					<th>GST Number</th>
-					<th>Company Start Date</th>
-					<th>Owner Name</th>
-					<th>Service Type</th>
-					<th>Contact Number</th>
-					<th>Alternative Number</th>
-					<th>Email</th>
-					<th>Website</th>
-					<th>Profile Status</th>
-					<th>Status</th>
+					<th>Category</th>
+					<th>Product Name</th>
+					<th>Product Price</th>
+					<th>Delivery Charge</th>
+					<th>Description</th>
+					<th>Available</th>
 					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${ent}" var="entites">
+				<c:forEach items="${products}" var="entites">
 					<tr>
-						<td data-label="Id">${entites.vendorId}</td>
-						<td data-label="Vendor Name">${entites.vendorName}</td>
-						<td data-label="Location">${entites.location}</td>
-						<td data-label="GST Number">${entites.gstNo}</td>
-						<td data-label="Company Start Date">${entites.companyStartDate}</td>
-						<td data-label="Owner Name">${entites.ownerName}</td>
-						<td data-label="Service Type">${entites.serviceType}</td>
-						<td data-label="Contact Number">${entites.contactNo}</td>
-						<td data-label="Alternative Number">${entites.alternativeNo}</td>
-						<td data-label="Email" id="approve">${entites.email}</td>
-						<td data-label="Website">${entites.website}</td>
-						<td data-label="Profile Status">${entites.accountLockStatus}</td>
-						<td data-label="Status">${entites.status}</td>
-						<td><a href="approveStatus/${entites.vendorId}"
-							class="actionBtn" id="approveBtn">Approve</a> <a
-							href="rejectStatus/${entites.vendorId}" class="actionBtn"
-							id="rejectBtn">Reject</a></td>
+						<td data-label="Product ID">${entites.productId}</td>
+						<td data-label="Vendor Name">${entites.vendor.vendorName}</td>
+						<td data-label="Category">${entites.category}</td>
+						<td data-label="Product Name">${entites.productName}</td>
+						<td data-label="Product Price">${entites.productPrice}</td>
+						<td data-label=">Delivery Charge">${entites.deliveryCharge}</td>
+						<td data-label="Description">${entites.description}</td>
+						<td data-label="Available">${entites.available}</td>
+						<td><a href="placeOrder?productId=${entites.productId}"
+							class="button" id="button">ORDER</a> <%=session.getAttribute("productId")%>
+						</td>
 					</tr>
-
 				</c:forEach>
 			</tbody>
 		</table>
+		<div class="container"></div>
+		<div class="popup">
+			<div class="popup-content">
+				<div class="row">
+					<div class="input-box">
+						<i class="fas fa-user"> <strong
+							class="font-weight-bold mt-2 wrapper">Vendor Name :
+								${entites.vendor.vendorName}</strong></i>
+					</div>
+
+					<div class="input-box">
+						<i class="fas fa-cube"><strong
+							class="font-weight-bold mt-2 wrapper">Product Name :
+								${entites.productName}</strong></i>
+					</div>
+
+					<div class="input-box">
+						<i class="fas fa-list"> <strong
+							class="font-weight-bold mt-2 wrapper">Category :
+								${entites.category}</strong></i>
+					</div>
+
+					<div class="input-box">
+						<i class="fas fa-dollar-sign"> <strong
+							class="font-weight-bold mt-2 wrapper">Product Price :
+								${entites.productPrice}</strong></i>
+
+					</div>
+
+					<div class="input-box">
+						<i class="fas fa-truck"> <strong
+							class="font-weight-bold mt-2 wrapper">Delivery Charge :
+								${entites.deliveryCharge}</strong></i>
+					</div>
+
+					<div class="input-box">
+						<i class="fas fa-check-circle"><strong
+							class="font-weight-bold mt-2 wrapper">Available :
+								${entites.available}</strong></i>
+					</div>
+
+				</div>
+
+				<a href="#" class="close" id="close">X</a>
+				<h1>ORDER</h1>
+				<hr>
+				<form action="placeitem/${entites.productId}" method="post">
+
+					<input type="number" placeholder="Order Quantity"
+						name="orderQuantity"> <input type="text"
+						placeholder="Delivery Address" name="deliveryAddress"> <input
+						type="text" placeholder="Message" name="message"> <a
+						href="#" class="button" id="placeOrder">Place Your Order</a>
+				</form>
+			</div>
+		</div>
 	</div>
 
 
 	<script>
         function search() {
-            let filter = document.getElementById("vendorInput").value.toUpperCase();
+            let filter = document.getElementById("orderInput").value.toUpperCase();
 
-            let table = document.getElementById("vendorTable");
+            let table = document.getElementById("orderTable");
 
             let tr = table.getElementsByTagName("tr");
 
             for (var i = 0; i < tr.length; i++) {
-                let td = tr[i].getElementsByTagName("td")[1];
+                let td = tr[i].getElementsByTagName("td")[2];
 
                 if (td) {
                     let textValue = td.textContenet || td.innerHTML;
@@ -385,10 +490,23 @@ body {
 
         let time = document.getElementById("current-time");
 
-        setInterval(()=>{
-            let d=new Date();
-            time.innerHTML=d.toLocaleTimeString();
-        },1000)
+        setInterval(() => {
+            let d = new Date();
+            time.innerHTML = d.toLocaleTimeString();
+        }, 1000)
+
+        const xhttp = new XMLHttpRequest();
+
+        xhttp.open("GET", "http://localhost:8080/VendorManagement/placeOrder/" + productId);
+        xhttp.send();
+
+        xhttp.onload.document.getElementById("button").addEventListener("click", function () {
+            document.querySelector(".popup").style.display = "flex";
+        })
+
+        document.getElementById("close").addEventListener("click", function () {
+            document.querySelector(".popup").style.display = "none";
+        })
 
     </script>
 

@@ -19,18 +19,18 @@ public class SpringWebInti extends AbstractAnnotationConfigDispatcherServletInit
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
 		System.out.println("Creating the getServletConfigClasses");
-		return new Class[] {BeanConfiguration.class};
+		return new Class[] { BeanConfiguration.class };
 	}
 
 	@Override
 	protected String[] getServletMappings() {
 		System.out.println("Creating the getServletMappings");
-		return new String[] {"/"};
-	}
-	
-	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
+		return new String[] { "/" };
 	}
 
+	@Override
+	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+		System.out.println("configureDefaultServletHandling Enabled");
+		configurer.enable();
+	}
 }

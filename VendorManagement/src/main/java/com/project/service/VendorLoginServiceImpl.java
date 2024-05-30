@@ -1,13 +1,7 @@
 package com.project.service;
 
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.Temporal;
-import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.project.entity.VendorManagementEntity;
@@ -46,20 +40,20 @@ public class VendorLoginServiceImpl implements VendorLoginService {
 	@Override
 	public String loginOtpAjax(String otp) {
 		System.out.println("invoking the loginOtpAjax in LoginImpl");
-		List<VendorManagementEntity> entities=this.repository.findAll();
+		List<VendorManagementEntity> entities = this.repository.findAll();
 		for (VendorManagementEntity mail : entities) {
-			if(mail.getOtp().equals(otp)) {
+			if (mail.getOtp().equals(otp)) {
 				return "";
-			}else if(mail.getFailedAttempt()==1) {
+			} else if (mail.getFailedAttempt() == 1) {
 				return "*Wrong Otp, Remaining Attempt 2";
-			}else if(mail.getFailedAttempt()==2) {
+			} else if (mail.getFailedAttempt() == 2) {
 				return "*Wrong Otp, Remaining Attempt 1";
 			}
-//				else if(mail.getAccountLockStatus().equals("Locked")) {
-//				return "*Wrong Expired, Reset Your OTP";
-//			}
+				else if(mail.getAccountLockStatus().equals("Locked")) {
+				return "*Otp Expired, Reset Your OTP";
+			}
 		}
-	
+
 		return "*Otp Not Matching";
 	}
 
@@ -99,7 +93,6 @@ public class VendorLoginServiceImpl implements VendorLoginService {
 		return entity;
 	}
 
-	// verify-otp
 	@Override
 	public boolean verifyOtp(String otp, String email) {
 		System.out.println("invoking the verifyOtp() in loginservice");
@@ -120,7 +113,6 @@ public class VendorLoginServiceImpl implements VendorLoginService {
 		return false;
 	}
 
-	// Increase Failed Attempt
 
 	@Override
 	public void updateFailedAttemptCount(Integer failedAttempt, String email) {
@@ -147,4 +139,5 @@ public class VendorLoginServiceImpl implements VendorLoginService {
 		System.out.println("expireOTPAndResetAttempt is done");
 
 	}
+
 }

@@ -1,11 +1,14 @@
 package com.project.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Properties;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.project.dto.VendorDTO;
 import com.project.entity.VendorManagementEntity;
 import com.project.repository.VendorManagementRepository;
 
@@ -25,8 +28,15 @@ public class VendorManagementServiceImpl implements VendorManagementService {
 	private VendorManagementRepository repo;
 
 	@Override
-	public boolean validateAndSave(VendorManagementEntity entity) {
+	public boolean validateAndSave(VendorDTO dto) {
 		System.out.println("Creating the validateAndSave");
+		dto.setCreatedBy(dto.getOwnerName());
+		dto.setCreatedDate(LocalDateTime.now());
+		dto.setStatus("Pending");
+		dto.setFailedAttempt(0);
+		dto.setProfileImage("demo.jpg");
+		VendorManagementEntity entity = new VendorManagementEntity();
+		BeanUtils.copyProperties(dto, entity);
 		this.repo.save(entity);
 		return true;
 	}
@@ -79,7 +89,7 @@ public class VendorManagementServiceImpl implements VendorManagementService {
 			try {
 				message.setFrom(new InternetAddress(fromEmail));
 				message.setSubject("Registration Form");
-				message.setText("Welcome to Vendor Management :" + ent.getOwnerName()+ " Thank you for register");
+				message.setText("Welcome to Vendor Management :" + ent.getOwnerName() + " Thank you for register");
 				message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 				Transport.send(message);
 				System.out.println("registration successfull");
@@ -93,4 +103,5 @@ public class VendorManagementServiceImpl implements VendorManagementService {
 		}
 		return false;
 	}
+
 }

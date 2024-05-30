@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import com.project.repository.AdminServiceRepository;
-import com.project.repository.VendorManagementRepository;
 import com.project.service.AdminAjaxService;
 
 @RestController
@@ -20,9 +17,6 @@ public class AdminAjaxController {
 	@Autowired
 	@Qualifier(value = "adminservice")
 	private AdminAjaxService ajaxService;
-	
-	@Autowired
-	private VendorManagementRepository vendorRepo;
 
 	public AdminAjaxController() {
 		System.out.println("Creating the AdminAjaxController()");
